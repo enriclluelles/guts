@@ -1,0 +1,14 @@
+{
+  "graphitePort": 49003,
+  "graphiteHost": "127.0.0.1",
+  "port": 8000,
+  "flushInterval": 5000,
+  "backends": [ "graphite" ],
+  "graphite": {
+    "legacyNamespace": false,
+    "prefixCounter": "ccc",
+    "prefixTimer": "timers",
+    "globalPrefix": "guts"
+  },
+  "percentThreshold": 80
+}
