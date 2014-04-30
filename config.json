@@ -5,10 +5,11 @@
   "flushInterval": 5000,
   "backends": [ "graphite" ],
   "graphite": {
-    "legacyNamespace": false,
+    "legacyNamespace": true,
     "prefixCounter": "ccc",
     "prefixTimer": "timers",
     "globalPrefix": "guts"
   },
-  "percentThreshold": 80
+  "percentThreshold": 80,
+	"flushCounts": true
 }

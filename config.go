@@ -20,6 +20,7 @@ type gutsConfig struct {
 	DeleteTimers     bool
 	DeleteGauges     bool
 	PercentThreshold int
+	FlushCounts      bool
 }
 
 type graphiteConfig struct {

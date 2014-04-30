@@ -63,6 +63,7 @@ func (graphite *Graphite) send(data []byte) {
 	if err != nil {
 		log.Printf("Couldn't connect to graphite")
 	} else {
+		fmt.Println(string(data))
 		client.Write(data)
 		client.Close()
 	}
@@ -71,9 +72,19 @@ func (graphite *Graphite) send(data []byte) {
 func (graphite *Graphite) countersData(ms *MetricStore, timestamp int64) []byte {
 	namespace := strings.Join(graphite.countersNamespace, ".")
 	var buffer bytes.Buffer
+	additionalSuffixRate := ""
 
-	for key, counter := range ms.counters {
-		buffer.WriteString(fmt.Sprintf("%s.%s %d %d\n", namespace, key, counter, timestamp))
+	for key, counterValue := range ms.counters {
+		keyForCount := "stats_counts." + key
+
+		if !config.Graphite.LegacyNamespace {
+			additionalSuffixRate = ".rate"
+			keyForCount = namespace + "." + key + ".count"
+		}
+		buffer.WriteString(fmt.Sprintf("%s.%s%s %d %d\n", namespace, key, additionalSuffixRate, counterValue/(config.FlushInterval/1000), timestamp))
+		if config.FlushCounts {
+			buffer.WriteString(fmt.Sprintf("%s %d %d\n", keyForCount, counterValue, timestamp))
+		}
 	}
 
 	return buffer.Bytes()
